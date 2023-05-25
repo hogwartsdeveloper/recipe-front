@@ -12,6 +12,11 @@ export class RecipeListComponent {
         'A Test Recipe',
         'This is simply a test', '' +
         'https://www.howtocook.recipes/wp-content/uploads/2021/05/Ratatouille-recipe-500x500.jpg'
+    ),
+    new Recipe(
+        'A Test Recipe',
+        'This is simply a test', '' +
+        'https://www.howtocook.recipes/wp-content/uploads/2021/05/Ratatouille-recipe-500x500.jpg'
     )
   ];
 

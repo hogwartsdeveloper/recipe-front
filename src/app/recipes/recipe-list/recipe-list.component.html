@@ -3,6 +3,7 @@
         <button class="btn btn-success">New Recipe</button>
     </div>
 </div>
+<hr>
 <div class="col-xs-12">
     <ng-container *ngFor="let item of recipes">
         <ng-container *ngTemplateOutlet="recipe; context: { $implicit: item}"></ng-container>
