@@ -6,19 +6,6 @@
 <hr>
 <div class="col-xs-12">
     <ng-container *ngFor="let item of recipes">
-        <ng-container *ngTemplateOutlet="recipe; context: { $implicit: item}"></ng-container>
+        <app-recipe-item [recipe]="item"></app-recipe-item>
     </ng-container>
-    <app-recipe-item></app-recipe-item>
 </div>
-
-<ng-template #recipe let-data>
-    <a href="#" class="list-group-item clearfix">
-        <div class="pull-left">
-            <h4 class="list-group-item-heading">{{data.name}}</h4>
-            <p class="list-group-item-text">{{data.description}}</p>
-        </div>
-        <span class="pull-right">
-            <img [src]="data.imagePath" class="img-responsive" style="max-height: 50px">
-        </span>
-    </a>
-</ng-template>
