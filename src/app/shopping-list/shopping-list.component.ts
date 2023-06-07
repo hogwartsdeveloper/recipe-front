@@ -11,4 +11,17 @@ export class ShoppingListComponent {
       new Ingredient('Apples', 5),
       new Ingredient('Tomatoes', 10)
   ];
+
+  onAdd(ingredient: Ingredient) {
+      this.ingredients.push(ingredient);
+  }
+
+  onDelete(ingredient: Ingredient) {
+      this.ingredients = this.ingredients.filter(
+          el => el.name !== ingredient.name && el.amount !== ingredient.amount);
+  }
+
+  onClear() {
+      this.ingredients = [];
+  }
 }
