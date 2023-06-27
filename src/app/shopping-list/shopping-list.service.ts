@@ -8,29 +8,38 @@ export class ShoppingListService {
     ];
 
     changeIngredient$ = new Subject<Ingredient[]>()
-
-    getIngredient() {
+    startEdit$ = new Subject<number>();
+    getIngredients() {
         return this.ingredients.slice();
+    }
+
+    getIngredient(index: number) {
+        return this.ingredients[index];
     }
 
     onAdd(ingredient: Ingredient) {
         this.ingredients.push(ingredient);
-        this.changeIngredient$.next(this.getIngredient());
+        this.changeIngredient$.next(this.getIngredients());
+    }
+
+    onUpdate(index: number, ingredient: Ingredient) {
+        this.ingredients[index] = ingredient;
+        this.changeIngredient$.next(this.getIngredients());
     }
 
     onDelete(ingredient: Ingredient) {
         this.ingredients = this.ingredients.filter(
             el => el.name !== ingredient.name && el.amount !== ingredient.amount);
-        this.changeIngredient$.next(this.getIngredient());
+        this.changeIngredient$.next(this.getIngredients());
     }
 
     onClear() {
         this.ingredients = [];
-        this.changeIngredient$.next(this.getIngredient());
+        this.changeIngredient$.next(this.getIngredients());
     }
 
     addIngredients(ingredients: Ingredient[]) {
         this.ingredients.push(...ingredients);
-        this.changeIngredient$.next(this.getIngredient());
+        this.changeIngredient$.next(this.getIngredients());
     }
 }
