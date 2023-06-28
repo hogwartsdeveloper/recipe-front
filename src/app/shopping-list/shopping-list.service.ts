@@ -27,9 +27,8 @@ export class ShoppingListService {
         this.changeIngredient$.next(this.getIngredients());
     }
 
-    onDelete(ingredient: Ingredient) {
-        this.ingredients = this.ingredients.filter(
-            el => el.name !== ingredient.name && el.amount !== ingredient.amount);
+    onDelete(index: number) {
+        this.ingredients.splice(index, 1);
         this.changeIngredient$.next(this.getIngredients());
     }
 
