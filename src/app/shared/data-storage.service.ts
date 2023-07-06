@@ -12,7 +12,11 @@ export class DataStorageService {
         const recipes = this.recipeService.getRecipes();;
 
         for (let i = 0; i < recipes.length; i++) {
-            data.push({id: i, ...recipes[i]});
+            const ingredients = [];
+            for (let y = 0; y < recipes[i]?.ingredients?.length; y++) {
+                ingredients.push({id: y, ...recipes[i].ingredients[y]});
+            }
+            data.push({id: i, ...recipes[i], ingredients});
         }
 
         return this.http.put<Recipe[]>("http://localhost:5041/recipe", data);
