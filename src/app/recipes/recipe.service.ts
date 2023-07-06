@@ -36,6 +36,10 @@ export class RecipeService {
         return this.recipes[index];
     }
 
+    getRecipes() {
+        return this.recipes.slice();
+    }
+
     addIngredientsToShoppingList(ingredients: Ingredient[]) {
         this.slService.addIngredients(ingredients);
     }
@@ -47,6 +51,11 @@ export class RecipeService {
 
     updateRecipe(index: number, recipe: Recipe) {
         this.recipes[index] = recipe;
+        this.getRecipes$.next(this.recipes.slice());
+    }
+
+    setRecipe(recipes: Recipe[]) {
+        this.recipes = recipes;
         this.getRecipes$.next(this.recipes.slice());
     }
 
