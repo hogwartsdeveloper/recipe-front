@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Form, FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {RecipeService} from "../recipe.service";
 import {Recipe} from "../recipe.model";
 
@@ -33,7 +33,7 @@ export class RecipeEditComponent implements OnInit {
       let name = '';
       let imagePath = '';
       let description = '';
-      let ingredients = new FormArray([]);
+      let ingredients = new FormArray<any>([]);
 
       if (this.editMode) {
           const recipe = this.recipeService.getRecipe(this.id);
