@@ -1,5 +1,7 @@
 import {Component} from "@angular/core";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {AuthService} from "./auth.service";
+import {take} from "rxjs";
 
 @Component({
     selector: "app-auth",
@@ -12,11 +14,23 @@ export class AuthComponent {
         password: new FormControl(null, [Validators.required])
     });
 
+    constructor(private authService: AuthService) {}
+
     onSwitchMode() {
         this.isLoginMode = !this.isLoginMode;
     }
 
     onSubmit() {
-        console.log(this.form);
+        console.log();
+        if (!this.isLoginMode) {
+            this.authService.signUp(this.form.getRawValue())
+                .pipe(take(1))
+                .subscribe(res => console.log(res));
+            return;
+        }
+
+        this.authService.signIn(this.form.getRawValue())
+            .pipe(take(1))
+            .subscribe(res => console.log(res));
     }
 }
