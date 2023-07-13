@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "./auth.service";
-import {take} from "rxjs";
+import {Observable, take} from "rxjs";
 
 @Component({
     selector: "app-auth",
@@ -24,22 +24,22 @@ export class AuthComponent {
 
     onSubmit() {
         this.isLoading = true;
+        this.errorMsg = null;
+        let authObservable: Observable<{token: string}>;
         if (!this.isLoginMode) {
-            this.authService.signUp(this.form.getRawValue())
-                .pipe(take(1))
-                .subscribe(res => {
-                    console.log(res);
-                    this.isLoading = false;
-                }, error => {
-                    this.errorMsg = error?.error || 'Error'
-                    this.isLoading = false;
-                });
-            this.form.reset();
-            return;
+            authObservable = this.authService.signUp(this.form.getRawValue());
+        } else {
+            authObservable = this.authService.signIn(this.form.getRawValue());
         }
 
-        this.authService.signIn(this.form.getRawValue())
-            .pipe(take(1))
-            .subscribe(res => console.log(res));
+        authObservable.pipe(take(1))
+            .subscribe(res => {
+                console.log(res);
+                this.isLoading = false;
+            }, error => {
+                this.errorMsg = error?.error || 'Error'
+                this.isLoading = false;
+            });
+        this.form.reset();
     }
 }
