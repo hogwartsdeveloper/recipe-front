@@ -1,3 +1,5 @@
+import * as moment from "moment";
+
 export class User {
     constructor(
         public email: string,
