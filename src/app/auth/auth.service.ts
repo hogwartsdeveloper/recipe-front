@@ -34,7 +34,8 @@ export class AuthService {
 
             data[key] = value;
         }
-        const user = new User(data.emailaddress, token, data.exp);
+
+        const user = new User(data.emailaddress, token, new Date(data.expired).getTime());
         this.user$.next(user);
     }
     private parseJWT(token: string) {
