@@ -1,16 +1,18 @@
-import * as moment from "moment";
-
 export class User {
     constructor(
         public email: string,
         private _token: string,
-        private _tokenExpirationDate: number
+        private _tokenExpiration: number
     ) {}
 
     get token() {
-        if (!this._tokenExpirationDate || new Date().getTime() > this._tokenExpirationDate) {
+        if (!this._tokenExpiration || new Date().getTime() > this._tokenExpiration) {
             return null;
         }
         return this._token;
+    }
+
+    get tokenExpiration() {
+        return this._tokenExpiration;
     }
 }
