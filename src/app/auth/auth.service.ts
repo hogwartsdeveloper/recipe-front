@@ -105,7 +105,7 @@ export class AuthService {
                     return of(null);
                 }))
                 .subscribe();
-        }, tokenExpiration - 1000 * 5);
+        }, tokenExpiration - 60000);
     }
 
     private clearLogoutTimer() {
