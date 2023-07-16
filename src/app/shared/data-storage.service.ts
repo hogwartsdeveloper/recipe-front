@@ -12,12 +12,12 @@ export class DataStorageService {
     ) {}
 
     storageRecipes() {
-        return this.http.put<Recipe[]>("http://localhost:5041/api/recipe", this.recipeService.getRecipes());
+        return this.http.put<Recipe[]>("/api/recipe", this.recipeService.getRecipes());
     }
 
     getRecipes(): Observable<Recipe[]> {
         return this.http.get<Recipe[]>(
-                "http://localhost:5041/api/recipe"
+                "/api/recipe"
         ).pipe(map(recipes => {
             return recipes.map(recipe => {
                 return {...recipe, ingredients: recipe?.ingredients || []}

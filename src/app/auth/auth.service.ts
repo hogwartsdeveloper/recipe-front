@@ -13,17 +13,17 @@ export class AuthService {
     constructor(private http: HttpClient, private router: Router) {}
 
     signUp(userData: IUserData) {
-        return this.http.post<{token: string}>('http://localhost:5041/api/Auth/register', userData)
+        return this.http.post<{token: string}>('/api/Auth/register', userData)
             .pipe(tap((res) => this.getTokenPayloadData(res.token)));
     }
 
     signIn(userData: IUserData) {
-        return this.http.post<{token: string}>('http://localhost:5041/api/Auth/login', userData)
+        return this.http.post<{token: string}>('/api/Auth/login', userData)
             .pipe(tap((res) => this.getTokenPayloadData(res.token)));
     }
 
     refreshToken() {
-        return this.http.get<{token: string}>('http://localhost:5041/api/Auth/refresh-token')
+        return this.http.get<{token: string}>('/api/Auth/refresh-token')
             .pipe(tap((res) => this.getTokenPayloadData(res.token)));
     }
 
@@ -44,7 +44,7 @@ export class AuthService {
 
         this.user$.next(user);
         this.autoLogout(userData._tokenExpiration - new Date().getTime());
-        this.autoUpdateToken(user.tokenExpiration);
+        this.autoUpdateToken(userData._tokenExpiration - new Date().getTime());
     }
 
     autoLogout(expiration: number) {
@@ -66,30 +66,6 @@ export class AuthService {
         this.clearLogoutTimer();
     }
 
-    private autoUpdateToken(tokenExpiration: number) {
-        this.clearUpdateTokenTimer();
-        this.updateTokenTimeout = setTimeout(() => {
-            this.refreshToken()
-                .pipe(take(1), catchError(() => {
-                    this.logout();
-                    return of(null);
-                }))
-                .subscribe();
-        }, tokenExpiration - (new Date().getTime() - 60000 * 5));
-    }
-
-    private clearLogoutTimer() {
-        if (this.logoutTimeout) {
-            clearTimeout(this.logoutTimeout);
-        }
-    }
-
-    private clearUpdateTokenTimer() {
-        if (this.updateTokenTimeout) {
-            clearTimeout(this.updateTokenTimeout);
-        }
-    }
-
     private getTokenPayloadData(token: string) {
         const payload = this.parseJWT(token);
         const data: any = {}
@@ -105,10 +81,11 @@ export class AuthService {
         const exp = new Date(data.expired).getTime();
         const user = new User(data.emailaddress, token, exp);
         this.autoLogout(exp - new Date().getTime());
-        this.autoUpdateToken(exp);
+        this.autoUpdateToken(exp - new Date().getTime());
         this.user$.next(user);
         localStorage.setItem('user', JSON.stringify(user));
     }
+
     private parseJWT(token: string) {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -117,5 +94,29 @@ export class AuthService {
         }).join(''));
 
         return JSON.parse(jsonPayload);
+    }
+
+    private autoUpdateToken(tokenExpiration: number) {
+        this.clearUpdateTokenTimer();
+        this.updateTokenTimeout = setTimeout(() => {
+            this.refreshToken()
+                .pipe(take(1), catchError(() => {
+                    this.logout();
+                    return of(null);
+                }))
+                .subscribe();
+        }, tokenExpiration - 1000 * 5);
+    }
+
+    private clearLogoutTimer() {
+        if (this.logoutTimeout) {
+            clearTimeout(this.logoutTimeout);
+        }
+    }
+
+    private clearUpdateTokenTimer() {
+        if (this.updateTokenTimeout) {
+            clearTimeout(this.updateTokenTimeout);
+        }
     }
 }
