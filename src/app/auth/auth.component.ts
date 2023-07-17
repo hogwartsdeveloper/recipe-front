@@ -1,14 +1,18 @@
-import {Component} from "@angular/core";
+import {Component, ComponentFactoryResolver, ViewChild} from "@angular/core";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "./auth.service";
 import {Observable, take} from "rxjs";
 import {Router} from "@angular/router";
+
+import { AlertComponent } from "../shared/alert/alert.component";
+import {PlaceholderDirective} from "../shared/placeholder/placeholder.directive";
 
 @Component({
     selector: "app-auth",
     templateUrl: "./auth.component.html"
 })
 export class AuthComponent {
+    @ViewChild(PlaceholderDirective) alertHost: PlaceholderDirective;
     isLoginMode = true;
     form = new FormGroup({
         email: new FormControl(null, [Validators.required, Validators.email]),
@@ -17,7 +21,11 @@ export class AuthComponent {
     isLoading = false;
     errorMsg: string;
 
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(
+        private authService: AuthService,
+        private router: Router,
+        private componentFactoryResolver: ComponentFactoryResolver
+    ) {}
 
     onSwitchMode() {
         this.isLoginMode = !this.isLoginMode;
@@ -39,9 +47,22 @@ export class AuthComponent {
                 this.isLoading = false;
                 this.router.navigate(['recipes']);
             }, error => {
-                this.errorMsg = error?.error || 'Error'
+                this.errorMsg = error?.message || 'Error';
+                this.showErrorAlert(this.errorMsg);
                 this.isLoading = false;
             });
         this.form.reset();
+    }
+
+    private showErrorAlert(message: string) {
+        const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
+        const hostViewContainerRef = this.alertHost.viewContainerRef;
+        hostViewContainerRef.clear();
+
+        const componentRef = hostViewContainerRef.createComponent(alertCmpFactory);
+        componentRef.instance.message = message;
+        componentRef.instance.close.pipe(take(1)).subscribe(() => {
+            hostViewContainerRef.clear();
+        });
     }
 }
