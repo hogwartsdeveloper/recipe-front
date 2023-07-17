@@ -16,11 +16,12 @@ const routes: Routes = [
         path: 'recipes',
         component: RecipesComponent,
         canActivate: [AuthGuard],
+        resolve: [RecipeResolverService],
         children: [
-            { path: '', component: RecipeStartComponent, resolve: [RecipeResolverService]  },
+            { path: '', component: RecipeStartComponent  },
             { path: 'new', component: RecipeEditComponent },
-            { path: ':id', component: RecipeDetailComponent, resolve: [RecipeResolverService] },
-            { path: ':id/edit', component: RecipeEditComponent, resolve: [RecipeResolverService] }
+            { path: ':id', component: RecipeDetailComponent },
+            { path: ':id/edit', component: RecipeEditComponent }
         ]
     },
     { path: 'shopping-list',

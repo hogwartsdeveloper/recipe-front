@@ -105,9 +105,9 @@ export class AuthService {
                     return of(null);
                 }))
                 .subscribe();
-        }, tokenExpiration - 60000);
+        }, Math.max(tokenExpiration - 60000, 5000));
     }
-
+K
     private clearLogoutTimer() {
         if (this.logoutTimeout) {
             clearTimeout(this.logoutTimeout);
