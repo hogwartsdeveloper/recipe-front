@@ -1,9 +1,6 @@
 import {RouterModule, Routes} from "@angular/router";
 import {NgModule} from "@angular/core";
-
-import {ShoppingListComponent} from "./shopping-list/shopping-list.component";
 import {AuthComponent} from "./auth/auth.component";
-import {AuthGuard} from "./auth/auth.guard";
 
 const routes: Routes = [
     { path: '', redirectTo: '/recipes', pathMatch: 'full' },
@@ -11,9 +8,9 @@ const routes: Routes = [
         path: 'recipes',
         loadChildren: () => import('./recipes/recipe.module').then(m => m.RecipeModule),
     },
-    { path: 'shopping-list',
-        component: ShoppingListComponent,
-        canActivate: [AuthGuard]
+    {
+        path: 'shopping-list',
+        loadChildren: () => import('./shopping-list/shopping-list.module').then(m => m.ShoppingListModule)
     },
     { path: 'auth', component: AuthComponent }
 ];
