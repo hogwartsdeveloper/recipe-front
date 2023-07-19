@@ -5,7 +5,7 @@ import {IUserData} from "./models/user-data.model";
 import {BehaviorSubject, catchError, of, take, tap} from "rxjs";
 import {User} from "./models/user.model";
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class AuthService {
     user$ = new BehaviorSubject<User>(null);
     logoutTimeout: ReturnType<typeof setTimeout>;

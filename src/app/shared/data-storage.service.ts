@@ -4,7 +4,7 @@ import {RecipeService} from "../recipes/services/recipe.service";
 import {Recipe} from "../recipes/recipe.model";
 import {map, Observable, tap} from "rxjs";
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class DataStorageService {
     constructor(
         private http: HttpClient,
