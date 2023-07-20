@@ -15,7 +15,7 @@ import {AuthGuard} from "./auth/auth.guard";
         DataStorageService,
         RecipeService,
         ShoppingListService,
-        {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}
+        {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
     ]
 })
 export class CoreModule {}
